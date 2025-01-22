@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verification Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .verify_box {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+        }
+
+        .alert-error {
+            background-color: #dc3545;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-update {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .empty {
+            text-align: center;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .empty td {
+            background-color: #f9f9f9;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="verify_box">
+        <h1>Verification Dashboard</h1>
+
+        <!-- Display messages if any -->
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-error{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>User Type</th>
+                    <th>Certificates</th>
+                    <th>Status</th>
+                    <th>Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in user_status %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.get_user_type_display }}</td>
+
+                    <!-- Certificates column -->
+                    <td>
+                        {% for work in cert %}
+                            {% if work.user == user %}
+                                {% if work.certificates %}
+                                    <a href="{{ work.certificates.url }}" target="_blank">View Certificate</a>
+                                {% else %}
+                                    No certificate uploaded
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+
+                    <td>{{ user.get_status_display }}</td>
+
+                    <!-- Form for updating user status -->
+                    <td>
+                        <form action="{% url 'verification' user.id %}" method="post">
+                            {% csrf_token %}
+                            <select name="status">
+                                <option value="pending" {% if user.status == "pending" %}selected{% endif %}>Pending</option>
+                                <option value="verified" {% if user.status == "verified" %}selected{% endif %}>Verified</option>
+                                <option value="rejected" {% if user.status == "rejected" %}selected{% endif %}>Rejected</option>
+                            </select>
+                            <button type="submit" class="btn-update">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr class="empty">
+                    <td colspan="6">No pending users or trainers.</td> <!-- Adjust colspan to match the table columns -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+

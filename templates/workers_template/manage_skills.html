@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Skills and Certifications</title>
+    <style>
+        .room-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px 0;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .room-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        .room-table th, .room-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .room-table th {
+            text-align: left;
+        }
+    </style>
+</head>
+<body><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Worker Profile</title>
+</head>
+<body>
+
+{% for use in user %}
+    <div class="details">
+        <span class="label">Full Name:</span>
+        <span class="value">{{ use.full_name }}</span><br>
+
+        <span class="label">Certificates:</span>
+        {% if use.certificates %}
+            <span class="value"><a href="{{ use.certificates.url }}" target="_blank">Download Certificate</a></span><br>
+        {% else %}
+            <span class="value">No certificates available</span><br>
+        {% endif %}
+
+        <span class="label">Skills:</span>
+        <span class="value">{{ use.skills }}</span>
+    </div>
+{% endfor %}
+
+
+
+
+</body>
+</html>

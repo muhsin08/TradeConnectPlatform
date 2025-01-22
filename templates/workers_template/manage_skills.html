@@ -40,26 +40,13 @@
     <title>View Worker Profile</title>
 </head>
 <body>
+<h1>mange profile</h1>
+{% for users in user %}
+<p>{{ users.skills }}:skill</p>
+<a href="{{ users.certificates.url }}" target="_blank">View Certificate</a>
+<button class="edit"><a href="{% url 'certificate_edit' users.id %}">Edit</a></button>
 
-{% for use in user %}
-    <div class="details">
-        <span class="label">Full Name:</span>
-        <span class="value">{{ use.full_name }}</span><br>
-
-        <span class="label">Certificates:</span>
-        {% if use.certificates %}
-            <span class="value"><a href="{{ use.certificates.url }}" target="_blank">Download Certificate</a></span><br>
-        {% else %}
-            <span class="value">No certificates available</span><br>
-        {% endif %}
-
-        <span class="label">Skills:</span>
-        <span class="value">{{ use.skills }}</span>
-    </div>
 {% endfor %}
-
-
-
 
 </body>
 </html>

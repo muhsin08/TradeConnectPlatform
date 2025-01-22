@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Your Documents</title>
+</head>
+<body>
+    <h1>Manage Your Documents</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <table border="1px">
+            <tr>
+                <th><label for="certificates">Certificate:</label></th>
+                <td>
+                    <object data="{{ data.certificates.url }}" type="application/pdf" width="300" height="400"></object><br>
+                    <a href="{{ data.certificates.url }}" target="_blank">View Certificate</a><br>
+                    <input type="file" id="certificates" name="certificates" value="{{ data.certificates }}">
+                </td>
+            </tr>
+            <tr>
+                <th><label for="name">Skills:</label></th>
+                <td><input type="text" name="name" value="{{ data.skills }}"></td>
+            </tr>
+        </table>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
